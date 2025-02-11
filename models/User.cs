@@ -1,6 +1,6 @@
 namespace ConvoConsole.Models
 {
-    public class User(
+    internal class User(
         string username = "",
         string password = "",
         string email = "",

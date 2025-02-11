@@ -1,14 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ConvoConsole;
+using ConvoConsole.Models;
+using ConvoConsole.Service;
 
-using ConvoConsole;
+DatabaseService dbService = new();
+UserServices userServices = new(dbService);
 
-// Configuration
-ConfigurationBuilder configuration = new ConfigurationBuilder();
-configuration.AddJsonFile("appsettings.json");
-configuration.SetBasePath(Directory.GetCurrentDirectory());
-IConfigurationRoot config = configuration.Build();
-
-Console.WriteLine(config.GetConnectionString("ConvoDB"));
+userServices.CreateUser(new User());
 
 Display.Greetings();
 
