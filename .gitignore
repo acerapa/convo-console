@@ -37,3 +37,6 @@ ScaffoldingReadMe.txt
 project.lock.json
 project.fragment.lock.json
 artifacts/
+
+# ssh-git config
+ssh-git.sh
