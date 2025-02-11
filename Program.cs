@@ -1,4 +1,14 @@
-﻿using ConvoConsole;
+﻿using Microsoft.Extensions.Configuration;
+
+using ConvoConsole;
+
+// Configuration
+ConfigurationBuilder configuration = new ConfigurationBuilder();
+configuration.AddJsonFile("appsettings.json");
+configuration.SetBasePath(Directory.GetCurrentDirectory());
+IConfigurationRoot config = configuration.Build();
+
+Console.WriteLine(config.GetConnectionString("ConvoDB"));
 
 Display.Greetings();
 
@@ -11,16 +21,16 @@ while (!choice.Equals("3"))
     {
         case "1":
             // Login
-            Auth.Login(Display.LoginForm());
+            Authtentication.Login(Display.LoginForm());
             break;
         case "2":
-            Console.WriteLine("Register");
+            Display.RegisterForm();
             break;
         case "3":
             Console.WriteLine("Exit");
             break;
         default:
-            Console.WriteLine("Invalid choice. Please try again.");
+            Display.InvalidChoice();
             break;
     }
 

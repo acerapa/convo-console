@@ -1,4 +1,4 @@
-namespace ConvoConsole.auth
+namespace ConvoConsole.Auth
 {
     internal class Credentials(string username, string password)
     {

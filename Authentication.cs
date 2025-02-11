@@ -1,15 +1,14 @@
-using ConvoConsole.auth;
+using ConvoConsole.Auth;
 using ConvoConsole.Models;
 
 namespace ConvoConsole
 {
-    internal class Auth
+    internal class Authtentication
     {
         /// <summary>
         /// Login a user
         /// </summary>
-        /// <param name="username">The username of the user</param>
-        /// <param name="password">The password of the user</param>
+        /// <param name="credentials">User credentials used in authentication</param>
         /// <returns>The user object</returns>
         public static User Login(Credentials credentials)
         {
