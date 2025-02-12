@@ -6,9 +6,10 @@ namespace ConvoConsole.Service
 {
     internal class DatabaseService
     {
-        private MySqlConnection _connection = null;
+        private MySqlConnection _connection = new MySqlConnection();
 
-        public MySqlConnection Connect() {
+        public MySqlConnection Connect()
+        {
             ConfigurationBuilder builder = new ConfigurationBuilder();
             builder.SetBasePath(Directory.GetCurrentDirectory());
             builder.AddJsonFile("appsettings.json");
@@ -17,16 +18,19 @@ namespace ConvoConsole.Service
 
             string connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
 
-            try {
-                if (connectionString.Length == 0) {
+            try
+            {
+                if (connectionString.Length == 0)
+                {
                     throw new Exception("Connection string not found");
                 }
-
-                _connection = new MySqlConnection(connectionString);
-
+                
+                _connection.ConnectionString = connectionString;
                 // test connection
                 _connection.Open();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.Message);
             }
 
