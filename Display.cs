@@ -1,4 +1,5 @@
 using ConvoConsole.Auth;
+using ConvoConsole.Models;
 
 namespace ConvoConsole
 {
@@ -51,6 +52,9 @@ namespace ConvoConsole
                 "| 1. Login                                     |\n" +
                 "| 2. Register                                  |\n" +
                 "| 3. Exit                                      |\n" +
+                "| 4. Get All Users (Debug)                     |\n" +
+                "| 5. Delete User (Debug)                       |\n" +
+                "| 6. Update User (Debug)                       |\n" +
                 "+----------------------------------------------+"
             );
             Console.ResetColor();
@@ -76,34 +80,96 @@ namespace ConvoConsole
 
 
         /// <summary>
-        /// Display user registration form
+        /// Display user form
+        /// We can use this form to create or update user
         /// </summary>
         /// <returns>Void</returns>
-        public static object RegisterForm()
+        public static User UserForm(User? user = null)
         {
-            Console.WriteLine("Register");
-            Console.Write("Enter your first name: ");
-            string firstName = Console.ReadLine() ?? "";
-            Console.Write("Enter your last name: ");
-            string lastName = Console.ReadLine() ?? "";
-            Console.Write("Enter your username: ");
-            string username = Console.ReadLine() ?? "";
-            Console.Write("Enter your password: ");
-            string password = Console.ReadLine() ?? "";
-            Console.Write("Enter your email: ");
-            string email = Console.ReadLine() ?? "";
-            Console.Write("Enter your phone number: ");
-            string phoneNumber = Console.ReadLine() ?? "";
-
-            return new
+            User returnedUser = new();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            if (user != null)
             {
-                username,
-                password,
-                email,
-                firstName,
-                lastName,
-                phoneNumber
-            };
+                Console.WriteLine(
+                    "+------------------------+\n" +
+                    "|       Update User       |\n" +
+                    "+------------------------+"
+                );
+
+                returnedUser = user;
+            }
+            else
+            {
+                Console.WriteLine(
+                    "+-------------------------+\n" +
+                    "|       Register          |\n" +
+                    "+-------------------------+"
+                );
+
+            }
+
+            string input = "";
+
+            Console.ResetColor();
+            Console.Write(string.Format("Enter your first name{0}: ", user != null ? $" ({user.FirstName})" : ""));
+            input = Console.ReadLine() ?? "";
+            returnedUser.FirstName = input.Length > 0 ? input : (user != null ? user.FirstName : "");
+
+            Console.Write(string.Format("Enter your last name{0}: ", user != null ? $" ({user.LastName})" : ""));
+            input = Console.ReadLine() ?? "";
+            returnedUser.LastName = input.Length > 0 ? input : (user != null ? user.LastName : "");
+
+            Console.Write(string.Format("Enter your username{0}: ", user != null ? $" ({user.Username})" : ""));
+            input = Console.ReadLine() ?? "";
+            returnedUser.Username = input.Length > 0 ? input : (user != null ? user.Username : "");
+
+            Console.Write(string.Format("Enter your password{0}: ", user != null ? $" ({user.Password})" : ""));
+            input = Console.ReadLine() ?? "";
+            returnedUser.Password = input.Length > 0 ? input : (user != null ? user.Password : "");
+
+            Console.Write(string.Format("Enter your email{0}: ", user != null ? $" ({user.Email})" : ""));
+            input = Console.ReadLine() ?? "";
+            returnedUser.Email = input.Length > 0 ? input : (user != null ? user.Email : "");
+
+            Console.Write(string.Format("Enter your phone number{0}: ", user != null ? $" ({user.PhoneNumber})" : ""));
+            input = Console.ReadLine() ?? "";
+            returnedUser.PhoneNumber = input.Length > 0 ? input : (user != null ? user.PhoneNumber : "");
+
+            return returnedUser;
+        }
+
+        /// <summary>Show given message into a success format</summary>
+        /// <param name="message">The message to be shown</param>
+        /// <returns>Void</returns>
+        public static void ShowSuccessMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        /// <summary>Show given message into an error format</summary>
+        /// <param name="message">The message to be shown</param>
+        /// <returns>Void</returns>
+        public static void ShowErrorMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+
+        // Testing Users
+        public static void ShowUserDetails(User user)
+        {
+            Console.WriteLine(
+                $"User ID:        {user.Id}\n" +
+                $"Username:       {user.Username}\n" +
+                $"First Name:     {user.FirstName}\n" +
+                $"Last Name:      {user.LastName}\n" +
+                $"Email:          {user.Email}\n" +
+                $"Phone Number:   {user.PhoneNumber}\n"
+            );
         }
     }
 }
