@@ -55,6 +55,8 @@ namespace ConvoConsole
                 "| 4. Get All Users (Debug)                     |\n" +
                 "| 5. Delete User (Debug)                       |\n" +
                 "| 6. Update User (Debug)                       |\n" +
+                "| 7. Get user by username (Debug)              |\n" +
+                "| 8. Show authenticated user (Debug)           |\n" +
                 "+----------------------------------------------+"
             );
             Console.ResetColor();
@@ -69,7 +71,14 @@ namespace ConvoConsole
         /// <returns>The credentials object</returns>
         public static Credentials LoginForm()
         {
-            Console.WriteLine("Login");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(
+                    "+------------------------+\n" +
+                    "|         Login          |\n" +
+                    "+------------------------+"
+                );
+            Console.ResetColor();
+            
             Console.Write("Enter your username: ");
             string username = Console.ReadLine() ?? "";
             Console.Write("Enter your password: ");
@@ -87,7 +96,7 @@ namespace ConvoConsole
         public static User UserForm(User? user = null)
         {
             User returnedUser = new();
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Blue;
             if (user != null)
             {
                 Console.WriteLine(

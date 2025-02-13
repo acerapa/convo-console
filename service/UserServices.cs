@@ -5,7 +5,7 @@ namespace ConvoConsole.Service
 {
     internal class UserServices
     {
-        private MySqlConnection _connection;
+        private readonly MySqlConnection _connection;
         public UserServices(DatabaseService dbservice)
         {
             _connection = dbservice.Connect();
@@ -51,7 +51,8 @@ namespace ConvoConsole.Service
                 MySqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    User user = new () {
+                    User user = new()
+                    {
                         Id = reader.GetInt32(0).ToString(),
                         Username = reader.GetString(1),
                         Password = reader.GetString(2),
@@ -79,9 +80,49 @@ namespace ConvoConsole.Service
             return users;
         }
 
+        public User? GetUserByUsername(string username)
+        {
+            User? user = null;
+            try
+            {
+                MySqlCommand command = _connection.CreateCommand();
+                command.CommandText = "SELECT * FROM users WHERE username = @username LIMIT 1";
+                command.Parameters.AddWithValue("@username", username);
+                MySqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    user = new()
+                    {
+                        Id = reader.GetInt32(0).ToString(),
+                        Username = reader.GetString(1),
+                        Password = reader.GetString(2),
+                        Email = reader.GetString(3),
+                        FirstName = reader.GetString(4),
+                        LastName = reader.GetString(5),
+                        PhoneNumber = reader.GetString(6)
+                    };
+                }
+
+                reader.Close();
+                if (user != null) {
+                    Display.ShowSuccessMessage($"Retrieve user with username {username}!");
+                } else {
+                    throw new Exception($"User with username {username} not found!");
+                }
+            }
+            catch (Exception ex)
+            {
+                Display.ShowErrorMessage(ex.Message);
+            }
+
+            return user;
+        }
+
         public void UpdateUser(User user)
         {
-            try {
+            try
+            {
                 MySqlCommand command = _connection.CreateCommand();
                 command.CommandText = "UPDATE users SET username = @username, password = @password, email = @email, first_name = @first_name, last_name = @last_name, phone_number = @phone_number WHERE id = @id";
                 command.Parameters.AddWithValue("@username", user.Username);
@@ -92,23 +133,28 @@ namespace ConvoConsole.Service
                 command.Parameters.AddWithValue("@phone_number", user.PhoneNumber);
                 command.Parameters.AddWithValue("@id", user.Id);
                 command.ExecuteNonQuery();
-                
+
                 Display.ShowSuccessMessage("User updated successfully!");
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Display.ShowErrorMessage(ex.Message);
             }
         }
 
         public void DeleteUser(string id)
         {
-            try {
+            try
+            {
                 MySqlCommand command = _connection.CreateCommand();
                 command.CommandText = "DELETE FROM users WHERE id = @id";
                 command.Parameters.AddWithValue("@id", id);
                 command.ExecuteNonQuery();
 
                 Display.ShowSuccessMessage("User deleted successfully!");
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Display.ShowErrorMessage(ex.Message);
             }
         }
