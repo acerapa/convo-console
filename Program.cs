@@ -4,10 +4,13 @@ using ConvoConsole.Service;
 
 DatabaseService dbService = new();
 UserServices userServices = new(dbService);
+AuthenticationService authenticationService = new(dbService);
 
 Display.Greetings();
 
 List<User> users = new();
+
+User? authenticatedUser = null;
 
 // When there is no user logged in, display the menu
 string choice = Display.UnauthenticatedMenu();
@@ -18,7 +21,7 @@ while (!choice.Equals("3"))
     {
         case "1":
             // Login
-            Authtentication.Login(Display.LoginForm());
+            authenticatedUser = authenticationService.Login(Display.LoginForm());
             break;
         case "2":
             userServices.CreateUser(Display.UserForm());
@@ -38,22 +41,36 @@ while (!choice.Equals("3"))
         case "6":
             Console.Write("Enter user id: ");
             string userId = Console.ReadLine() ?? "";
-            if (userId != null) {
+            if (userId != null)
+            {
                 User? user = users.Find(user => user.Id == userId);
-                if (user != null) {
+                if (user != null)
+                {
                     userServices.UpdateUser(Display.UserForm(user));
-                } else {
+                }
+                else
+                {
                     Display.ShowErrorMessage("User not found!");
                 }
             }
             break;
         case "7":
-            Console.Write("Enter user id: ");
-            string userIdToDelete = Console.ReadLine() ?? "";
-            Console.WriteLine(userIdToDelete.Length);
-            Console.WriteLine(userIdToDelete ?? "Value is null");
-            Console.WriteLine(userIdToDelete == "Value is null");
+            Console.Write("Enter username: ");
+            string username = Console.ReadLine() ?? "";
+            User? u = userServices.GetUserByUsername(username);
+            if (u != null)
+            {
+                Display.ShowUserDetails(u);
+            }
+            else
+            {
+                Display.ShowErrorMessage("User not found!");
+            }
 
+            break;
+        case "8":
+            if (authenticatedUser != null) { Display.ShowSuccessMessage("You are currently login!"); Display.ShowUserDetails(authenticatedUser); }
+            else Display.ShowErrorMessage("You are not logged in!");
             break;
         default:
             Display.InvalidChoice();
