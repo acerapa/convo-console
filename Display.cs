@@ -66,6 +66,24 @@ namespace ConvoConsole
             return choice;
         }
 
+        public static string AuthenticatedMenu()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(
+                "+----------------------------------------------+\n" +
+                "| ******************************************** |\n" +
+                "| * Please select action from the following: * |\n" +
+                "| ******************************************** |\n" +
+                "| 1. Logout                                    |\n" +
+                "+----------------------------------------------+"
+            );
+            Console.ResetColor();
+
+            Console.Write("Enter your choice: ");
+            string choice = Console.ReadLine() ?? "";
+            return choice;
+        }
+
         /// <summary>
         /// Display the form for login
         /// </summary>

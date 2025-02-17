@@ -13,17 +13,23 @@ List<User> users = new();
 User? authenticatedUser = null;
 
 // When there is no user logged in, display the menu
-string choice = Display.UnauthenticatedMenu();
 
 User? userData = null;
 
-while (!choice.Equals("3"))
+string choice = string.Empty;
+// unathenticated user menu
+do
 {
+    choice = Display.UnauthenticatedMenu();
     switch (choice)
     {
         case "1":
             // Login
             authenticatedUser = authenticationService.Login(Display.LoginForm());
+            if (authenticatedUser != null)
+            {
+                choice = string.Empty;
+            }
             break;
         case "2":
             userData = Display.UserForm();
@@ -88,8 +94,32 @@ while (!choice.Equals("3"))
             Display.InvalidChoice();
             break;
     }
-
-    choice = Display.UnauthenticatedMenu();
 }
+while (!choice.Equals("3") && authenticatedUser == null);
+
+
+// authenticated user menu
+
+do
+{
+    choice = Display.AuthenticatedMenu();
+    switch (choice)
+    {
+        case "1":
+            Console.WriteLine("Logout");
+            break;
+        case "2":
+            Console.WriteLine("Profile");
+            break;
+        case "3":
+            Console.WriteLine("Exit");
+            break;
+        default:
+            Display.InvalidChoice();
+            break;
+    }
+}
+
+while (authenticatedUser != null && choice != "3");
 
 Display.GoodBye();
