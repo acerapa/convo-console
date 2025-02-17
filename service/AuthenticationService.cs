@@ -13,9 +13,9 @@ namespace ConvoConsole.Service {
             userService = new UserServices(dbservice);
         }
 
-        public User Login(Credentials credentials)
+        public User? Login(Credentials credentials)
         {
-            User user = new User();
+            User? user = null;
             User? authUser = userService.GetUserByUsername(credentials.Username);
             if (authUser != null) {
                 if (authUser.Password == credentials.Password) {
