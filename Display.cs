@@ -1,4 +1,5 @@
 using ConvoConsole.Auth;
+using ConvoConsole.Components;
 using ConvoConsole.Models;
 
 namespace ConvoConsole
@@ -78,7 +79,7 @@ namespace ConvoConsole
                     "+------------------------+"
                 );
             Console.ResetColor();
-            
+
             Console.Write("Enter your username: ");
             string username = Console.ReadLine() ?? "";
             Console.Write("Enter your password: ");
@@ -93,9 +94,9 @@ namespace ConvoConsole
         /// We can use this form to create or update user
         /// </summary>
         /// <returns>Void</returns>
-        public static User UserForm(User? user = null)
+        public static User? UserForm(User? user = null)
         {
-            User returnedUser = new();
+            User? returnedUser = new();
             Console.ForegroundColor = ConsoleColor.Blue;
             if (user != null)
             {
@@ -117,32 +118,32 @@ namespace ConvoConsole
 
             }
 
-            string input = "";
+            try
+            {
+                Console.ResetColor();
+                string input = InputComponent.CancellableReadLine(string.Format("Enter your first name{0}: ", user != null ? $" ({user.FirstName})" : "")) ?? "";
+                returnedUser.FirstName = input.Length > 0 ? input : (user != null ? user.FirstName : "");
 
-            Console.ResetColor();
-            Console.Write(string.Format("Enter your first name{0}: ", user != null ? $" ({user.FirstName})" : ""));
-            input = Console.ReadLine() ?? "";
-            returnedUser.FirstName = input.Length > 0 ? input : (user != null ? user.FirstName : "");
+                input = InputComponent.CancellableReadLine(string.Format("Enter your last name{0}: ", user != null ? $" ({user.LastName})" : ""));
+                returnedUser.LastName = input.Length > 0 ? input : (user != null ? user.LastName : "");
 
-            Console.Write(string.Format("Enter your last name{0}: ", user != null ? $" ({user.LastName})" : ""));
-            input = Console.ReadLine() ?? "";
-            returnedUser.LastName = input.Length > 0 ? input : (user != null ? user.LastName : "");
+                input = InputComponent.CancellableReadLine(string.Format("Enter your username{0}: ", user != null ? $" ({user.Username})" : ""));
+                returnedUser.Username = input.Length > 0 ? input : (user != null ? user.Username : "");
 
-            Console.Write(string.Format("Enter your username{0}: ", user != null ? $" ({user.Username})" : ""));
-            input = Console.ReadLine() ?? "";
-            returnedUser.Username = input.Length > 0 ? input : (user != null ? user.Username : "");
+                input = InputComponent.CancellableReadLine(string.Format("Enter your password{0}: ", user != null ? $" ({user.Password})" : ""));
+                returnedUser.Password = input.Length > 0 ? input : (user != null ? user.Password : "");
 
-            Console.Write(string.Format("Enter your password{0}: ", user != null ? $" ({user.Password})" : ""));
-            input = Console.ReadLine() ?? "";
-            returnedUser.Password = input.Length > 0 ? input : (user != null ? user.Password : "");
+                input = InputComponent.CancellableReadLine(string.Format("Enter your email{0}: ", user != null ? $" ({user.Email})" : ""));
+                returnedUser.Email = input.Length > 0 ? input : (user != null ? user.Email : "");
 
-            Console.Write(string.Format("Enter your email{0}: ", user != null ? $" ({user.Email})" : ""));
-            input = Console.ReadLine() ?? "";
-            returnedUser.Email = input.Length > 0 ? input : (user != null ? user.Email : "");
-
-            Console.Write(string.Format("Enter your phone number{0}: ", user != null ? $" ({user.PhoneNumber})" : ""));
-            input = Console.ReadLine() ?? "";
-            returnedUser.PhoneNumber = input.Length > 0 ? input : (user != null ? user.PhoneNumber : "");
+                input = InputComponent.CancellableReadLine(string.Format("Enter your phone number{0}: ", user != null ? $" ({user.PhoneNumber})" : ""));
+                returnedUser.PhoneNumber = input.Length > 0 ? input : (user != null ? user.PhoneNumber : "");
+            }
+            catch
+            {
+                ShowInfoMessage("\nUser form cancelled\n");
+                returnedUser = null;
+            }
 
             return returnedUser;
         }
@@ -163,6 +164,13 @@ namespace ConvoConsole
         public static void ShowErrorMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        public static void ShowInfoMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine(message);
             Console.ResetColor();
         }
